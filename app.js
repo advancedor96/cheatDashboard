@@ -1,0 +1,76 @@
+const express = require('express');
+const axios = require('axios');
+require('dotenv').config();
+const owner = process.env.OWNER;
+const repo = process.env.REPO;
+const path = process.env.GPATH; // 注意：环境变量中的变量名通常大写
+const token = process.env.GTOKEN;
+const port = process.env.PORT;
+
+const app = express();
+const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+const numbers = [1, 4, 7, 10];
+
+
+
+const CommitIt = async ()=>{
+  try {
+    const response = await axios.get(getContentsUrl, {
+      headers: { 
+          'Authorization': `token ${token}`
+      }});
+    const content = Buffer.from(response.data.content, 'base64').toString('utf-8');
+    const sha = response.data.sha;
+    const numbers = content.split(',')
+      .map(s => s.match(/\d+/g) ? parseInt(s.match(/\d+/g)[0], 10) : NaN)
+      .filter(n => !isNaN(n));
+
+    const lastNumber = numbers.length ? numbers[numbers.length - 1] : 0;
+    const newContent = `${content}\n${lastNumber + 1}(+),`;
+    // console.log('新內容:',newContent);
+    
+    const encodedContent = Buffer.from(newContent).toString('base64');
+    const updateResponse = await axios.put(getContentsUrl, {
+        message: '更新 hehe.txt 內容',
+        content: encodedContent,
+        sha: sha,
+    }, {
+        headers: { 
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    console.log('文件更新成功:', updateResponse.data.content.path);
+  } catch (err) {
+    throw err;
+  }
+
+}
+
+
+app.get('/hehe', async (req, res) => {
+  const randomIndex = Math.floor(Math.random() * numbers.length);
+  const total_fake_time = 10;
+  try {
+    for(i=0;i<total_fake_time;i++){
+      await CommitIt();
+    }
+    res.send({"msg": "finished."});
+  } catch (error) {
+    console.log('error',error);
+    
+    res.status(500).send({"msg": "error."});
+  }
+});
+
+app.listen(port, () => {
+  console.log(`應用正在監聽 port:${port}`);
+});
+
+// (async ()=>{
+//   for(i=0;i<total_fake_time;i++){
+//     await CommitIt();
+//   }
+// }
+
+// )();
