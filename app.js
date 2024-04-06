@@ -30,8 +30,10 @@ const CommitIt = async ()=>{
     // console.log('新內容:',newContent);
     
     const encodedContent = Buffer.from(newContent).toString('base64');
+    let date_ob = new Date();
+    const commitMsg = `${date_ob.getMonth() + 1}/${date_ob.getDate()}`;
     const updateResponse = await axios.put(getContentsUrl, {
-        message: '更新 hehe.txt 內容',
+        message: commitMsg,
         content: encodedContent,
         sha: sha,
     }, {
@@ -50,12 +52,12 @@ const CommitIt = async ()=>{
 
 app.get('/hehe', async (req, res) => {
   const randomIndex = Math.floor(Math.random() * numbers.length);
-  const total_fake_time = 10;
+  const total_fake_time = numbers[randomIndex];
   try {
     for(i=0;i<total_fake_time;i++){
       await CommitIt();
     }
-    res.send({"msg": "finished."});
+    res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('error',error);
     
@@ -67,10 +69,4 @@ app.listen(port, () => {
   console.log(`應用正在監聽 port:${port}`);
 });
 
-// (async ()=>{
-//   for(i=0;i<total_fake_time;i++){
-//     await CommitIt();
-//   }
-// }
 
-// )();
