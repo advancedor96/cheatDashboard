@@ -9,7 +9,7 @@ const port = process.env.PORT;
 
 const app = express();
 const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-const numbers = [1, 4, 7, 10];
+const numbers = [1, 2];
 
 
 
@@ -68,5 +68,6 @@ app.get('/hehe', async (req, res) => {
 app.listen(port, () => {
   console.log(`應用正在監聽 port:${port}`);
 });
-
+// 取得最近一天的 commits 數量：
+// https://api.github.com/repos/advancedor96/udemy_1007/commits?since=2024-04-05T11:21:00+08:00&until=2024-04-06T11:21:00+08:00
 
