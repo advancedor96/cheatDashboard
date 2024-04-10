@@ -1,5 +1,6 @@
 const express = require('express');
 const axios = require('axios');
+const serverless = require("serverless-http");
 require('dotenv').config();
 const owner = process.env.OWNER;
 const repo = process.env.REPO;
@@ -8,10 +9,18 @@ const token = process.env.GTOKEN;
 const port = process.env.PORT;
 
 const app = express();
+const router = express.Router();
+
+router.get("/", (req, res) => {
+  res.send("App is running..");
+});
+
+
 const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 const numbers = [1, 2];
 
 
+app.use("/.netlify/functions/app", router);
 
 const CommitIt = async ()=>{
   try {
@@ -68,6 +77,7 @@ app.get('/hehe', async (req, res) => {
 app.listen(port, () => {
   console.log(`應用正在監聽 port:${port}`);
 });
+module.exports.handler = serverless(app);
 // 取得最近一天的 commits 數量：
 // https://api.github.com/repos/advancedor96/udemy_1007/commits?since=2024-04-05T11:21:00+08:00&until=2024-04-06T11:21:00+08:00
 
