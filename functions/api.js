@@ -73,7 +73,7 @@ router.get("/hehe", async (req, res) => {
       await CommitIt();
     }
     // res.render('hehe', { times: total_fake_time });
-    res.sendFile(node_path.join(__dirname, '../dist', 'index.html'));
+    res.sendFile(node_path.join(__dirname, 'dist', 'index.html'));
     // res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('error',error);
