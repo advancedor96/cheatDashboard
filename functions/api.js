@@ -11,6 +11,8 @@ const port = process.env.PORT;
 const app = express();
 const router = express.Router();
 
+app.set('view engine', 'ejs');
+
 router.get("/he", (req, res) => res.send("Hello World!"));
 
 router.get("/", (req, res) => {
@@ -69,7 +71,8 @@ router.get("/hehe", async (req, res) => {
     for(i=0;i<total_fake_time;i++){
       await CommitIt();
     }
-    res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
+    res.render('hehe', { times: total_fake_time });
+    // res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('error',error);
     
