@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const serverless = require("serverless-http");
+const node_path = require('path');
 require('dotenv').config();
 const owner = process.env.OWNER;
 const repo = process.env.REPO;
@@ -71,7 +72,8 @@ router.get("/hehe", async (req, res) => {
     for(i=0;i<total_fake_time;i++){
       await CommitIt();
     }
-    res.render('hehe', { times: total_fake_time });
+    // res.render('hehe', { times: total_fake_time });
+    res.sendFile(node_path.join(__dirname, '../dist', 'index.html'));
     // res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('error',error);

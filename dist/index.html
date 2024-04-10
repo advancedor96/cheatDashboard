@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script
+    src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js">
+  </script>
+
+<!-- Optionally, include the theme (if you don't want to struggle to write the CSS) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css"
+  />
   <style>
     body {
         background: linear-gradient(to bottom right, #FF9966, #FF6666);
@@ -38,7 +47,13 @@
 </head>
 <body>
   <div class="button-container">
+    <div class="calendar">
+        Loading....
+    </div>
       <a class="button" href="/api/hehe">Update github profile</a>
   </div>
+  <script>
+    GitHubCalendar(".calendar", "advancedor96", { responsive: true , tooltips: true});
+  </script>
 </body>
 </html>
