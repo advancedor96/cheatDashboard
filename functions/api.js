@@ -11,6 +11,8 @@ const port = process.env.PORT;
 const app = express();
 const router = express.Router();
 
+router.get("/he", (req, res) => res.send("Hello World!"));
+
 router.get("/", (req, res) => {
   res.send("App is running..");
 });
@@ -20,7 +22,6 @@ const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/$
 const numbers = [1, 2];
 
 
-app.use("/.netlify/functions/app", router);
 
 const CommitIt = async ()=>{
   try {
@@ -59,7 +60,9 @@ const CommitIt = async ()=>{
 }
 
 
-app.get('/hehe', async (req, res) => {
+router.get("/hehe", async (req, res) => {
+  console.log('進入 /hehe');
+  
   const randomIndex = Math.floor(Math.random() * numbers.length);
   const total_fake_time = numbers[randomIndex];
   try {
@@ -74,9 +77,11 @@ app.get('/hehe', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`應用正在監聽 port:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用正在監聽 port:${port}`);
+// });
+
+app.use("/api/", router);
 module.exports.handler = serverless(app);
 // 取得最近一天的 commits 數量：
 // https://api.github.com/repos/advancedor96/udemy_1007/commits?since=2024-04-05T11:21:00+08:00&until=2024-04-06T11:21:00+08:00
