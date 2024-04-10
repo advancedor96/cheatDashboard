@@ -1,6 +1,7 @@
 [build]
     functions = "functions"
     publish = "dist"
+    node_bundler = "esbuild"
 [[redirects]]
   force = true
   from = "/api/*"
