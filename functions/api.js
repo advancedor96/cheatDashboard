@@ -22,12 +22,15 @@ router.get("/", (req, res) => {
 
 
 const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-const numbers = [1, 2];
+const numbers = [0, 1, 9, 18, 32];
 
 
 
 const CommitIt = async ()=>{
   try {
+    // 添加延遲以避免 API 限流
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     const response = await axios.get(getContentsUrl, {
       headers: { 
           'Authorization': `token ${token}`
@@ -57,7 +60,8 @@ const CommitIt = async ()=>{
     });
     console.log('文件更新成功:', updateResponse.data.content.path);
   } catch (err) {
-    throw err;
+    console.error('CommitIt 錯誤:', err.message);
+    throw new Error(`提交失敗: ${err.message}`);
   }
 
 }
@@ -68,17 +72,23 @@ router.get("/hehe", async (req, res) => {
   
   const randomIndex = Math.floor(Math.random() * numbers.length);
   const total_fake_time = numbers[randomIndex];
+  console.log('準備做次數:', total_fake_time);
+  
   try {
-    for(i=0;i<total_fake_time;i++){
+    for(let i=0;i<total_fake_time;i++){
       await CommitIt();
     }
     // res.render('hehe', { times: total_fake_time });
     res.sendFile(node_path.join(__dirname, 'dist', 'index.html'));
     // res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
   } catch (error) {
-    console.log('error',error);
+    console.log('執行錯誤:',error);
     
-    res.status(500).send({"msg": "error."});
+    // res.status(500).send({"msg": "error."});
+    res.status(500).json({
+      msg: "error",
+      detail: error.message
+    });
   }
 });
 
