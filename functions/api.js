@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
 
 
 const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-const numbers = [0, 1, 9, 18, 32];
+const numbers = [0, 1, 2,3,4,5,6,7,8,9,10];
 
 
 
@@ -61,7 +61,7 @@ const CommitIt = async ()=>{
     console.log('文件更新成功:', updateResponse.data.content.path);
   } catch (err) {
     console.error('CommitIt 錯誤:', err.message);
-    throw new Error(`提交失敗: ${err.message}`);
+    // throw new Error(`提交失敗: ${err.message}`);
   }
 
 }
@@ -76,11 +76,11 @@ router.get("/hehe", async (req, res) => {
   
   try {
     for(let i=0;i<total_fake_time;i++){
-      await CommitIt();
+      // await CommitIt();
     }
     // res.render('hehe', { times: total_fake_time });
-    res.sendFile(node_path.join(__dirname, 'dist', 'index.html'));
-    // res.status(200).send(`<h1>Finished ${total_fake_time} times.</h1>`);
+    // res.sendFile(node_path.join(__dirname, 'dist', 'index.html'));
+    res.status(200).send(`<h1>Finished(not really) ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('執行錯誤:',error);
     
