@@ -29,7 +29,7 @@ const numbers = [0, 1, 2,3,4,5,6,7,8,9,10];
 const CommitIt = async ()=>{
   try {
     // 添加延遲以避免 API 限流
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // await new Promise(resolve => setTimeout(resolve, 1000));
 
     const response = await axios.get(getContentsUrl, {
       headers: { 
@@ -80,7 +80,7 @@ router.get("/hehe", async (req, res) => {
     }
     // res.render('hehe', { times: total_fake_time });
     // res.sendFile(node_path.join(__dirname, 'dist', 'index.html'));
-    res.status(200).send(`<h1>Finished(not really) ${total_fake_time} times.</h1>`);
+    res.status(200).send(`<h1>Finished(real) ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('執行錯誤:',error);
     
