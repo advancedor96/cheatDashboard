@@ -38,13 +38,14 @@ const CommitIt = async ()=>{
       }});
     const content = Buffer.from(response.data.content, 'base64').toString('utf-8');
     const sha = response.data.sha;
+    console.log('1讀取到內容:', sha);
     const numbers = content.split(',')
       .map(s => s.match(/\d+/g) ? parseInt(s.match(/\d+/g)[0], 10) : NaN)
       .filter(n => !isNaN(n));
 
     const lastNumber = numbers.length ? numbers[numbers.length - 1] : 0;
     const newContent = `${content}\n${lastNumber + 1}(+),`;
-    // console.log('新內容:',newContent);
+    console.log('2準備新內容:',newContent);
     
     const encodedContent = Buffer.from(newContent).toString('base64');
     let date_ob = new Date();
@@ -59,6 +60,7 @@ const CommitIt = async ()=>{
             'Content-Type': 'application/json'
         }
     });
+    console.log('文件更新的回應:', updateResponse);
     console.log('文件更新成功:', updateResponse.data.content.path);
   } catch (err) {
     console.error('CommitIt 錯誤:', err.message);
