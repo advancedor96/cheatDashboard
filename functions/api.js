@@ -23,34 +23,29 @@ router.get("/", (req, res) => {
 
 
 const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-const numbers = [0, 1, 2,3,4,5,6,7,8,9,10];
+const numbers = [0, 1, 2, 0, 3,4,5, 0, 6,7,8, 0, 9,10];
 
 
 
-const CommitIt = async ()=>{
+const CommitIt = async (i)=>{
   try {
     // 添加延遲以避免 API 限流
     // await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('執行第1個函數');
     const response = await axios.get(getContentsUrl, {
       headers: { 
           'Authorization': `token ${token}`
       }});
-    console.log('執行第2個函數:');
     const content = Buffer.from(response.data.content, 'base64').toString('utf-8');
     const sha = response.data.sha;
-    console.log('1讀取到內容:', sha);
-    const numbers = content.split(',')
-      .map(s => s.match(/\d+/g) ? parseInt(s.match(/\d+/g)[0], 10) : NaN)
-      .filter(n => !isNaN(n));
 
-    const lastNumber = numbers.length ? numbers[numbers.length - 1] : 0;
-    const newContent = `${content}\n${lastNumber + 1}(+),`;
-    console.log('2準備新內容:',newContent);
+    let date_ob = new Date();
+    const dateStr = `${date_ob.getMonth() + 1}/${date_ob.getDate()}`;
+    const newContent = `${content}\n${dateStr}`;
+
+
     
     const encodedContent = Buffer.from(newContent).toString('base64');
-    let date_ob = new Date();
-    const commitMsg = `${date_ob.getMonth() + 1}/${date_ob.getDate()}`;
+    const commitMsg = `${dateStr}-${i+1}`;
     const updateResponse = await axios.put(getContentsUrl, {
         message: commitMsg,
         content: encodedContent,
@@ -61,10 +56,8 @@ const CommitIt = async ()=>{
             'Content-Type': 'application/json'
         }
     });
-    console.log('文件更新的回應:', updateResponse);
-    console.log('文件更新成功:', updateResponse.data.content.path);
   } catch (err) {
-    console.error('CommitIt 錯誤:', err.message);
+    console.error('CommitIt 錯誤,檢查Netilify裡的env:', err.message);
     // throw new Error(`提交失敗: ${err.message}`);
   }
 
@@ -74,14 +67,9 @@ const CommitIt = async ()=>{
 router.get("/hehe", async (req, res) => {
   console.log('進入 /hehe');
   
-  console.log('numbers:', numbers);
   const randomIndex = Math.floor(Math.random() * numbers.length);
-  console.log('randomIndex:', randomIndex);
-
-  
   
   let total_fake_time = numbers[randomIndex];
-  total_fake_time = 1;
   console.log('準備做次數:', total_fake_time);
   
   // res.send(`<h1> peace </h1>`);
@@ -89,9 +77,10 @@ router.get("/hehe", async (req, res) => {
   
   try {
     for(let i=0;i<total_fake_time;i++){
-      await CommitIt();
+      await CommitIt(i);
     }
-    res.send(`<h1>Finished(real) ${total_fake_time} times.</h1>`);
+    res.send(`<h1>Finished(real) ${total_fake_time} times. <br />
+      <a href="/">Go Back</a></h1>`);
   } catch (error) {
     console.log('執行錯誤:',error);
     
