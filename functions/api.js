@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const serverless = require("serverless-http");
 const node_path = require('path');
+const { log } = require('console');
 require('dotenv').config();
 const owner = process.env.OWNER;
 const repo = process.env.REPO;
@@ -70,17 +71,24 @@ const CommitIt = async ()=>{
 router.get("/hehe", async (req, res) => {
   console.log('進入 /hehe');
   
+  console.log('numbers:', numbers);
   const randomIndex = Math.floor(Math.random() * numbers.length);
-  const total_fake_time = numbers[randomIndex];
+  console.log('randomIndex:', randomIndex);
+
+  
+  
+  let total_fake_time = numbers[randomIndex];
+  total_fake_time = 1;
   console.log('準備做次數:', total_fake_time);
+  
+  // res.send(`<h1> peace </h1>`);
+  // return;
   
   try {
     for(let i=0;i<total_fake_time;i++){
       await CommitIt();
     }
-    // res.render('hehe', { times: total_fake_time });
-    // res.sendFile(node_path.join(__dirname, 'dist', 'index.html'));
-    res.status(200).send(`<h1>Finished(real) ${total_fake_time} times.</h1>`);
+    res.send(`<h1>Finished(real) ${total_fake_time} times.</h1>`);
   } catch (error) {
     console.log('執行錯誤:',error);
     
