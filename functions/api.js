@@ -31,11 +31,12 @@ const CommitIt = async ()=>{
   try {
     // 添加延遲以避免 API 限流
     // await new Promise(resolve => setTimeout(resolve, 1000));
-
+    console.log('執行第1個函數');
     const response = await axios.get(getContentsUrl, {
       headers: { 
           'Authorization': `token ${token}`
       }});
+    console.log('執行第2個函數:');
     const content = Buffer.from(response.data.content, 'base64').toString('utf-8');
     const sha = response.data.sha;
     console.log('1讀取到內容:', sha);
