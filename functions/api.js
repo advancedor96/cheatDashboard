@@ -23,8 +23,8 @@ router.get("/", (req, res) => {
 
 
 const getContentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-const numbers = [0, 1, 2, 0, 3,4,5, 0, 6,7,8, 0, 9,10];
-
+const numbers = [0, 1, 2, 3, 4,5,6, 7, 8,9,10, 0, 0,0];
+let randomIndex = 0;
 
 
 const CommitIt = async (i)=>{
@@ -63,6 +63,37 @@ const CommitIt = async (i)=>{
 
 }
 
+router.get("/hehe/getRandomNumberCommit", async (req, res) => {
+  randomIndex = Math.floor(Math.random() * numbers.length);
+  const total_fake_time = numbers[randomIndex];
+  res.json({ count: total_fake_time });
+});
+router.get("/hehe/commit", async (req, res) => {
+  console.log('進入 /hehe/commit');
+
+  const total_fake_time = parseInt(req.query.count);
+  if (isNaN(total_fake_time)) {
+    return res.status(400).json({ 
+      error: '無效的 count 參數' 
+    });
+  }
+
+  console.log('執行次數:', total_fake_time);
+
+
+  // 在背景執行 commit
+  try {
+    for(let i = 0; i < total_fake_time; i++){
+      await CommitIt(i);
+    }
+    console.log('所有 commit 完成');
+  } catch (error) {
+    console.error('Commit 執行錯誤:', error);
+  }
+  
+  // 立即回應前端
+  res.json({ status: 'finished' });
+});
 
 router.get("/hehe", async (req, res) => {
   console.log('進入 /hehe');
@@ -70,6 +101,7 @@ router.get("/hehe", async (req, res) => {
   const randomIndex = Math.floor(Math.random() * numbers.length);
   
   let total_fake_time = numbers[randomIndex];
+  total_fake_time = 0;
   console.log('準備做次數:', total_fake_time);
   
   // res.send(`<h1> peace </h1>`);

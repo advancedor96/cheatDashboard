@@ -1,9 +1,16 @@
 [build]
     functions = "functions"
-    publish = "dist"
+    publish = "client/dist"
     node_bundler = "esbuild"
+    command = "cd client && npm install && npm run build"
 [[redirects]]
   force = true
   from = "/api/*"
   status = 200
   to = "/.netlify/functions/api/:splat"
+
+[[redirects]]
+    force = true   # 我自己新加的
+    from = "/*"
+    to = "/index.html"
+    status = 200

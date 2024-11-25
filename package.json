@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "dev": "netlify dev",
+    "dev:front": "cd client && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "netlify deploy --prod"
+    "build": "cd client && npm run build && cd .. && netlify deploy --prod"
   },
   "author": "",
   "license": "ISC",
