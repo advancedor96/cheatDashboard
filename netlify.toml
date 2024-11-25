@@ -10,6 +10,12 @@
   to = "/.netlify/functions/api/:splat"
 
 [[redirects]]
+  force = true
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+  
+[[redirects]]
     force = true   # 我自己新加的
     from = "/*"
     to = "/index.html"
